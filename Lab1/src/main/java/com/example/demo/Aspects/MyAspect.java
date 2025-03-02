@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class MyAspect {
+    public MyAspect() {
+        System.out.println("🔹 MyAspect is loaded into Spring context!");
+    }
 
     @Before("execution(* com.example.demo.controllers.*.*(..))")
     public void logBeforeControllerMethods() {
