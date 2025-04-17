@@ -35,6 +35,18 @@ public class StudentController {
         }
     }
 
+    @PutMapping("/{studentId}/courses/{courseId}")
+    public ResponseEntity<Student> addCourseToStudent(
+            @PathVariable Long studentId,
+            @PathVariable Long courseId) {
+
+        Student updated = studentService.addCourseToStudent(studentId, courseId);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PostMapping
     public ResponseEntity<Student> createStudent(@Valid @RequestBody CreateStudentDTO studentDTO) {
         Student newStudent = studentService.createStudent(studentDTO);

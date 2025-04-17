@@ -1,4 +1,6 @@
 package com.example.demo.Student;
+import com.example.demo.Courses.Course;
+import com.example.demo.Courses.CourseRepositery;
 import com.example.demo.Student.dto.CreateStudentDTO;
 import com.example.demo.Student.dto.UpdateStudentDTO;
 import org.springframework.beans.BeanUtils;
@@ -28,6 +30,23 @@ public class StudentService {
     public Optional<Student> getStudentById(Long id) {
         return studentRepository.findById(id);
     }
+
+
+
+    @Autowired
+    private CourseRepositery courseRepository;
+
+    public Student addCourseToStudent(Long studentId, Long courseId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found with id: " + courseId));
+
+        student.addCourse(course); // defined in Student.java
+        return studentRepository.save(student);
+    }
+
 
     // Create a new student
     public Student createStudent(CreateStudentDTO studentDTO) {
