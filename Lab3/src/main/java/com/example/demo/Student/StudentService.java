@@ -36,16 +36,18 @@ public class StudentService {
     @Autowired
     private CourseRepositery courseRepository;
 
-    public Student addCourseToStudent(Long studentId, Long courseId) {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
+    public Student addCourseToStudent(String studentNumber, String courseCode) {
+        Student student = studentRepository.findByStudentNumber(studentNumber);
+        Course course = courseRepository.findByCode(courseCode);
 
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Course not found with id: " + courseId));
-
-        student.addCourse(course); // defined in Student.java
-        return studentRepository.save(student);
+        if (student != null && course != null) {
+            student.getCourses().add(course);
+            return studentRepository.save(student);
+        } else {
+            throw new RuntimeException("Student or Course not found");
+        }
     }
+
 
 
     // Create a new student
@@ -95,6 +97,19 @@ public class StudentService {
     public Student findStudentByStudentNumber(String studentNumber) {
         return studentRepository.findByStudentNumber(studentNumber);
     }
+
+    public Student removeCourseFromStudent(String studentNumber, String courseCode) {
+        Student student = studentRepository.findByStudentNumber(studentNumber);
+        Course course = courseRepository.findByCode(courseCode);
+
+        if (student != null && course != null) {
+            student.getCourses().remove(course);
+            return studentRepository.save(student);
+        }
+
+        throw new RuntimeException("Student or Course not found");
+    }
+
 
     private String[] getNullPropertyNames(Object source) {
         final BeanWrapper src = new BeanWrapperImpl(source);

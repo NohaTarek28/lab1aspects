@@ -20,6 +20,10 @@ public class CourseService {
     public Course getCourseById(Long id) {
         return courseRepository.findById(id).orElse(null);
     }
+    public Course getCourseByCode(String code) {
+        return courseRepository.findByCode(code);
+    }
+
 
     public Course createCourse(CreateCourseDTO dto) {
         Course course = new Course();

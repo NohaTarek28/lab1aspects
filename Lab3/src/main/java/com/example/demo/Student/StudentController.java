@@ -35,17 +35,14 @@ public class StudentController {
         }
     }
 
-    @PutMapping("/{studentId}/courses/{courseId}")
+    @PostMapping("/{studentNumber}/add-course/{courseCode}")
     public ResponseEntity<Student> addCourseToStudent(
-            @PathVariable Long studentId,
-            @PathVariable Long courseId) {
-
-        Student updated = studentService.addCourseToStudent(studentId, courseId);
-        if (updated != null) {
-            return ResponseEntity.ok(updated);
-        }
-        return ResponseEntity.notFound().build();
+            @PathVariable String studentNumber,
+            @PathVariable String courseCode) {
+        Student updatedStudent = studentService.addCourseToStudent(studentNumber, courseCode);
+        return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
     }
+
 
     @PostMapping
     public ResponseEntity<Student> createStudent(@Valid @RequestBody CreateStudentDTO studentDTO) {
@@ -87,6 +84,20 @@ public class StudentController {
         List<Student> students = studentService.findStudentsWithGpaGreaterThan(minGpa);
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{studentNumber}/remove-course/{courseCode}")
+    public ResponseEntity<Student> removeCourseFromStudent(
+            @PathVariable String studentNumber,
+            @PathVariable String courseCode) {
+
+        try {
+            Student updatedStudent = studentService.removeCourseFromStudent(studentNumber, courseCode);
+            return ResponseEntity.ok(updatedStudent);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     // Find student by student number
     @GetMapping("/number/{studentNumber}")

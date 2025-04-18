@@ -30,6 +30,16 @@ public class CourseController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/code/{code}")
+    public ResponseEntity<Course> getCourseByCode(@PathVariable String code) {
+        Course course = courseService.getCourseByCode(code);
+        if (course != null) {
+            return ResponseEntity.ok(course);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
     @PostMapping
     public ResponseEntity<Course> createCourse(@Valid @RequestBody CreateCourseDTO dto) {
         Course course = courseService.createCourse(dto);
